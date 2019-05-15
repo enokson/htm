@@ -1,0 +1,7 @@
+[package]
+name = "htm"
+version = "0.1.0"
+authors = ["jenokson <kilograhm@pm.me>"]
+edition = "2018"
+
+[dependencies]
