@@ -179,7 +179,7 @@ let stylesheet = stylesheet_builder.build();
 </style>
 ```
 
-Using multiple selctors
+Using multiple selectors
 ```rust
 use htm::stylesheet::{ Entry, StyleSheet };
 use htm::cssbox::{ CssBox, Property };

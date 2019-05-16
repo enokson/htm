@@ -101,7 +101,7 @@ pub type Entries = Vec<Entry>;
 /// //</style>
 /// //
 /// ```
-/// Using multiple selctors
+/// Using multiple selectors
 /// ```
 /// use htm::stylesheet::{ Entry, StyleSheet };
 /// use htm::cssbox::{ CssBox, Property };
