@@ -55,7 +55,6 @@ let video_builder = Component::new("video", vec![
         Attribute::KV(("src", "/media/examples/flower.mp4")),
         Attribute::KV(("type", "video/mp4"))
     ]))
-
     .text("Sorry, your browser doesn't support embedded videos.");
 let video_tag = video_builder.build();
 ```

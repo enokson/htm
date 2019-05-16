@@ -65,17 +65,14 @@ pub type NodeInnerHTML = Vec<InnerHTML>;
 /// let video_builder = Component::new("video", vec![
 ///     Attribute::V("controls"),
 ///     Attribute::KV(("width", "250"))])
-/// 
 ///     .child(Component::new("source", vec![
 ///         Attribute::KV(("src", "/media/examples/flower.webm")),
 ///         Attribute::KV(("type", "video/webm"))
-///     ]))
-/// 
+///     ])) 
 ///     .child(Component::new("source", vec![
 ///         Attribute::KV(("src", "/media/examples/flower.mp4")),
 ///         Attribute::KV(("type", "video/mp4"))
-///     ]))
-/// 
+///     ])) 
 ///     .text("Sorry, your browser doesn't support embedded videos.");
 /// 
 /// assert_eq!(video_builder.build(), "<video controls width='250'><source src='/media/examples/flower.webm' type='video/webm'><source src='/media/examples/flower.mp4' type='video/mp4'>Sorry, your browser doesn't support embedded videos.</video>");
