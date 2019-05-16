@@ -1,7 +1,14 @@
 [package]
 name = "htm"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["jenokson <kilograhm@pm.me>"]
 edition = "2018"
+license = "MIT"
+description = "A server-side, component-oriented, compiled html templating library for rust"
+repository = "https://github.com/enokson/htm"
+categories = []
+keywords = [ "html", "template", "server-side", "component" ]
+readme = "..."
+publish = false
 
 [dependencies]
