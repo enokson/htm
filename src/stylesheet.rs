@@ -1,12 +1,12 @@
 use super::cssbox::{ CssBox };
 use super::component::{ Slice };
 
-pub type CssBoxes<'a> = Vec<CssBox<'a>>;
-pub enum Entry<'a> {
-    CssBox(CssBox<'a>),
-    Rule(Slice<'a>)
+pub type CssBoxes = Vec<CssBox>;
+pub enum Entry {
+    CssBox(CssBox),
+    Rule(String)
 }
-pub type Entries<'a> = Vec<Entry<'a>>;
+pub type Entries = Vec<Entry>;
 
 
 /// A style tag for embedded css
@@ -15,13 +15,16 @@ pub type Entries<'a> = Vec<Entry<'a>>;
 /// use htm::stylesheet::{ Entry, StyleSheet };
 /// use htm::cssbox::{ CssBox, Property };
 /// 
+/// let class_name = ".my-class".to_string();
+/// let height = ("height".to_string(), "250vh".to_string());
+/// 
 /// let stylesheet_builder = StyleSheet::new(vec![
-///     Entry::CssBox(CssBox::new(".my-class", vec![
-///         Property::Declaration(("height", "250vh")),
-///         Property::Declaration(("width", "100px"))
+///     Entry::CssBox(CssBox::new(".my-class".to_string(), vec![
+///         Property::Declaration(height),
+///         Property::Declaration(("width".to_string(), "100px".to_string()))
 ///     ])),
-///     Entry::CssBox(CssBox::new(".my-second-class", vec![
-///         Property::Declaration(("color", "red"))
+///     Entry::CssBox(CssBox::new(".my-second-class".to_string(), vec![
+///         Property::Declaration(("color".to_string(), "red".to_string()))
 ///     ]))
 /// ]);
 /// 
@@ -49,12 +52,12 @@ pub type Entries<'a> = Vec<Entry<'a>>;
 /// use htm::cssbox::{ CssBox, Property };
 /// 
 /// let stylesheet_builder = StyleSheet::new(vec![])
-///     .at_rule("@import 'custom.css'") // the simicolon will be added automatically when build is ran
-///     .css_box(CssBox::new(".my-class", vec![
-///         Property::Declaration(("height", "250vh")),
-///         Property::Declaration(("width", "100px"))]))
-///     .css_box(CssBox::new(".my-second-class", vec![
-///         Property::Declaration(("color", "red")) ]));
+///     .at_rule("@import 'custom.css'".to_string()) // the simicolon will be added automatically when build is ran
+///     .css_box(CssBox::new(".my-class".to_string(), vec![
+///         Property::Declaration(("height".to_string(), "250vh".to_string())),
+///         Property::Declaration(("width".to_string(), "100px".to_string()))]))
+///     .css_box(CssBox::new(".my-second-class".to_string(), vec![
+///         Property::Declaration(("color".to_string(), "red".to_string())) ]));
 /// 
 /// 
 /// let stylesheet = stylesheet_builder.build();
@@ -82,9 +85,9 @@ pub type Entries<'a> = Vec<Entry<'a>>;
 /// use htm::cssbox::{ CssBox, Property };
 /// 
 /// let stylesheet_builder = StyleSheet::new(vec![])
-///     .css_box(CssBox::new("@media (min-width: 801px)", vec![])
-///         .css_box(CssBox::new("body", vec![])
-///             .declaration("color", "red")));
+///     .css_box(CssBox::new("@media (min-width: 801px)".to_string(), vec![])
+///         .css_box(CssBox::new("body".to_string(), vec![])
+///             .declaration("color".to_string(), "red".to_string())));
 /// 
 /// 
 /// let stylesheet = stylesheet_builder.build();
@@ -107,8 +110,8 @@ pub type Entries<'a> = Vec<Entry<'a>>;
 /// use htm::cssbox::{ CssBox, Property };
 /// 
 /// let stylesheet_builder = StyleSheet::new(vec![])
-///     .css_box(CssBox::new("#my-id, .my-class, p.my-second-class", vec![])
-///         .declaration("color", "red"));
+///     .css_box(CssBox::new("#my-id, .my-class, p.my-second-class".to_string(), vec![])
+///         .declaration("color".to_string(), "red".to_string()));
 /// 
 /// let stylesheet = stylesheet_builder.build();
 /// 
@@ -123,24 +126,24 @@ pub type Entries<'a> = Vec<Entry<'a>>;
 /// //
 /// ```
 /// 
-pub struct StyleSheet<'a> {
-    lines: Entries<'a>
+pub struct StyleSheet {
+    lines: Entries
 }
 
-impl<'a> StyleSheet<'a> {
+impl StyleSheet {
 
-    pub fn new (lines: Entries<'a>) -> StyleSheet<'a> {
+    pub fn new (lines: Entries) -> StyleSheet {
         StyleSheet {
             lines
         }
     }
 
-    pub fn css_box (mut self, css_box: CssBox<'a>) -> StyleSheet<'a> {
+    pub fn css_box (mut self, css_box: CssBox) -> StyleSheet {
         self.lines.push(Entry::CssBox(css_box));
         self
     }
 
-    pub fn at_rule (mut self, rule: Slice<'a>) -> StyleSheet<'a> {
+    pub fn at_rule (mut self, rule: String) -> StyleSheet {
         self.lines.push(Entry::Rule(rule));
         self
     }

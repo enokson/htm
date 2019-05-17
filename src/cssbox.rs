@@ -1,35 +1,35 @@
 use super::component::{ Slice };
 
-pub type Declaration<'a> = (Slice<'a>, Slice<'a>);
-pub type Declarations<'a> = Vec<Declaration<'a>>;
+pub type Declaration = (String, String);
+pub type Declarations = Vec<Declaration>;
 
-pub enum Property<'a> {
-    CssBox(CssBox<'a>),
-    Declaration(Declaration<'a>)
+pub enum Property {
+    CssBox(CssBox),
+    Declaration(Declaration)
 }
 
-type Properties<'a> = Vec<Property<'a>>;
+type Properties = Vec<Property>;
 
-pub struct CssBox<'a> {
-    pub selector: Slice<'a>,
-    pub properties: Properties<'a>
+pub struct CssBox {
+    pub selector: String,
+    pub properties: Properties
 }
 
-impl<'a> CssBox<'a> {
+impl CssBox {
 
-    pub fn new (selector: Slice<'a>, properties: Properties<'a>) -> CssBox<'a> {
+    pub fn new (selector: String, properties: Properties) -> CssBox {
         CssBox {
             selector,
             properties
         }
     }
 
-    pub fn declaration (mut self, key: Slice<'a>, value: Slice<'a>) -> CssBox<'a> {
+    pub fn declaration (mut self, key: String, value: String) -> CssBox {
         self.properties.push(Property::Declaration((key, value)));
         self
     }
 
-    pub fn css_box (mut self, css_box: CssBox<'a>) -> CssBox<'a> {
+    pub fn css_box (mut self, css_box: CssBox) -> CssBox {
         self.properties.push(Property::CssBox(css_box));
         self
     }

@@ -1,19 +1,19 @@
 
-pub enum InnerHTML<'a> {
-    Component(Component<'a>),
-    Text(Slice<'a>)
+pub enum InnerHTML {
+    Component(Component),
+    Text(String)
 }
 
-pub enum Attribute<'a> {
-    KV(KV<'a>),
-    V(V<'a>)
+pub enum Attribute {
+    KV(KV),
+    V(V)
 }
 
 pub type Slice<'a> = &'a str;
-pub type KV<'a> = (Slice<'a>, Slice<'a>);
-pub type V<'a> = Slice<'a>;
-pub type Attributes<'a> = Vec<Attribute<'a>>;
-pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
+pub type KV = (String, String);
+pub type V = String;
+pub type Attributes = Vec<Attribute>;
+pub type NodeInnerHTML = Vec<InnerHTML>;
 
 /// An html component
 ///
@@ -22,10 +22,10 @@ pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
 /// ```rust
 /// use htm::component::{ Attribute, Component};
 /// 
-/// let p_builder = Component::new("p", vec![ 
-///     Attribute::KV(("id", "my-id")), 
-///     Attribute::KV(("class", "my-class"))])
-///     .text("Hello, world!");
+/// let p_builder = Component::new("p".to_string(), vec![ 
+///     Attribute::KV(("id".to_string(), "my-id".to_string())), 
+///     Attribute::KV(("class".to_string(), "my-class".to_string()))])
+///     .text("Hello, world!".to_string());
 /// let p = p_builder.build();
 ///
 /// assert_eq!(p, "<p id='my-id' class='my-class'>Hello, world!</p>");
@@ -37,16 +37,16 @@ pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
 /// ```
 /// use htm::component::{ Attribute, Component};
 ///
-/// let form_builder = Component::new("form", vec![
-///     Attribute::KV(("action", ""))])
-///     .child(Component::new("label", vec![ 
-///         Attribute::KV(("for", "test-input")) ])
-///         .text("Enter name: "))
-///     .child(Component::new("input", vec![
-///         Attribute::KV(("type", "text")),
-///         Attribute::KV(("name", "test-input")),
-///         Attribute::KV(("id", "test-input")),
-///         Attribute::V("required")]));
+/// let form_builder = Component::new("form".to_string(), vec![
+///     Attribute::KV(("action".to_string(), "".to_string()))])
+///     .child(Component::new("label".to_string(), vec![ 
+///         Attribute::KV(("for".to_string(), "test-input".to_string())) ])
+///         .text("Enter name: ".to_string()))
+///     .child(Component::new("input".to_string(), vec![
+///         Attribute::KV(("type".to_string(), "text".to_string())),
+///         Attribute::KV(("name".to_string(), "test-input".to_string())),
+///         Attribute::KV(("id".to_string(), "test-input".to_string())),
+///         Attribute::V("required".to_string())]));
 /// 
 /// let form = form_builder.build();
 /// assert_eq!(form, "<form action=''><label for='test-input'>Enter name: </label><input type='text' name='test-input' id='test-input' required></form>");
@@ -62,18 +62,18 @@ pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
 /// ```
 /// use htm::component::{ Attribute, Component };
 /// 
-/// let video_builder = Component::new("video", vec![
-///     Attribute::V("controls"),
-///     Attribute::KV(("width", "250"))])
-///     .child(Component::new("source", vec![
-///         Attribute::KV(("src", "/media/examples/flower.webm")),
-///         Attribute::KV(("type", "video/webm"))
+/// let video_builder = Component::new("video".to_string(), vec![
+///     Attribute::V("controls".to_string()),
+///     Attribute::KV(("width".to_string(), "250".to_string()))])
+///     .child(Component::new("source".to_string(), vec![
+///         Attribute::KV(("src".to_string(), "/media/examples/flower.webm".to_string())),
+///         Attribute::KV(("type".to_string(), "video/webm".to_string()))
 ///     ])) 
-///     .child(Component::new("source", vec![
-///         Attribute::KV(("src", "/media/examples/flower.mp4")),
-///         Attribute::KV(("type", "video/mp4"))
+///     .child(Component::new("source".to_string(), vec![
+///         Attribute::KV(("src".to_string(), "/media/examples/flower.mp4".to_string())),
+///         Attribute::KV(("type".to_string(), "video/mp4".to_string()))
 ///     ])) 
-///     .text("Sorry, your browser doesn't support embedded videos.");
+///     .text("Sorry, your browser doesn't support embedded videos.".to_string());
 /// 
 /// assert_eq!(video_builder.build(), "<video controls width='250'><source src='/media/examples/flower.webm' type='video/webm'><source src='/media/examples/flower.mp4' type='video/mp4'>Sorry, your browser doesn't support embedded videos.</video>");
 /// 
@@ -94,16 +94,16 @@ pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
 /// ```
 /// use htm::component::{ Attribute, Component };
 ///
-/// let form_builder = Component::new("form", vec![])
-///     .kv_attr("action", "")
-///     .child(Component::new("label", vec![])
-///         .kv_attr("for", "test-input")
-///         .text("Enter name: "))
-///     .child(Component::new("input", vec![])
-///         .kv_attr("type", "text")
-///         .kv_attr("name", "test-input")
-///         .kv_attr("id", "test-input")
-///         .v_attr("required"));
+/// let form_builder = Component::new("form".to_string(), vec![])
+///     .kv_attr("action".to_string(), "".to_string())
+///     .child(Component::new("label".to_string(), vec![])
+///         .kv_attr("for".to_string(), "test-input".to_string())
+///         .text("Enter name: ".to_string()))
+///     .child(Component::new("input".to_string(), vec![])
+///         .kv_attr("type".to_string(), "text".to_string())
+///         .kv_attr("name".to_string(), "test-input".to_string())
+///         .kv_attr("id".to_string(), "test-input".to_string())
+///         .v_attr("required".to_string()));
 /// 
 /// let form = form_builder.build();
 /// assert_eq!(form, "<form action=''><label for='test-input'>Enter name: </label><input type='text' name='test-input' id='test-input' required></form>");
@@ -113,15 +113,15 @@ pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
 /// //      <input type='text' name='test-input' id='test-input' required>
 /// //  </form>
 /// ```
-pub struct Component<'a> {
-    pub node_type: &'a str,
-    pub attributes: Attributes<'a>,
-    pub inner_html: NodeInnerHTML<'a>
+pub struct Component {
+    pub node_type: String,
+    pub attributes: Attributes,
+    pub inner_html: NodeInnerHTML
 }
 
-impl<'a> Component<'a> {
+impl Component {
 
-    pub fn new (node_type: &'a str, attributes: Attributes<'a>) -> Component<'a> {
+    pub fn new (node_type: String, attributes: Attributes) -> Component {
         Component {
             node_type,
             attributes,
@@ -183,22 +183,22 @@ impl<'a> Component<'a> {
         node
     }
 
-    pub fn kv_attr (mut self, key: Slice<'a>, value: Slice<'a>) -> Component<'a> {
+    pub fn kv_attr (mut self, key: String, value: String) -> Component {
         self.attributes.push(Attribute::KV((key, value)));
         self
     }
 
-    pub fn v_attr (mut self, value: Slice<'a>) -> Component<'a> {
+    pub fn v_attr (mut self, value: String) -> Component {
         self.attributes.push(Attribute::V(value));
         self
     }
 
-    pub fn child (mut self, child: Component<'a>) -> Component<'a> {
+    pub fn child (mut self, child: Component) -> Component {
         self.inner_html.push(InnerHTML::Component(child));
         self
     }
 
-    pub fn text (mut self, text: Slice<'a>) -> Component<'a> {
+    pub fn text (mut self, text: String) -> Component {
         self.inner_html.push(InnerHTML::Text(text));
         self
     }
