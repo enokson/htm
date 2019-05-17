@@ -1,12 +1,12 @@
 use super::cssbox::{ CssBox };
 use super::component::{ Slice };
 
-pub type CssBoxes = Vec<CssBox>;
-pub enum Entry {
-    CssBox(CssBox),
-    Rule(Slice)
+pub type CssBoxes<'a> = Vec<CssBox<'a>>;
+pub enum Entry<'a> {
+    CssBox(CssBox<'a>),
+    Rule(Slice<'a>)
 }
-pub type Entries = Vec<Entry>;
+pub type Entries<'a> = Vec<Entry<'a>>;
 
 
 /// A style tag for embedded css
@@ -123,24 +123,24 @@ pub type Entries = Vec<Entry>;
 /// //
 /// ```
 /// 
-pub struct StyleSheet {
-    lines: Entries
+pub struct StyleSheet<'a> {
+    lines: Entries<'a>
 }
 
-impl StyleSheet {
+impl<'a> StyleSheet<'a> {
 
-    pub fn new (lines: Entries) -> StyleSheet {
+    pub fn new (lines: Entries<'a>) -> StyleSheet<'a> {
         StyleSheet {
             lines
         }
     }
 
-    pub fn css_box (mut self, css_box: CssBox) -> StyleSheet {
+    pub fn css_box (mut self, css_box: CssBox<'a>) -> StyleSheet<'a> {
         self.lines.push(Entry::CssBox(css_box));
         self
     }
 
-    pub fn at_rule (mut self, rule: Slice) -> StyleSheet {
+    pub fn at_rule (mut self, rule: Slice<'a>) -> StyleSheet<'a> {
         self.lines.push(Entry::Rule(rule));
         self
     }

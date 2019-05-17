@@ -1,19 +1,19 @@
 
-pub enum InnerHTML {
-    Component(Component),
-    Text(Slice)
+pub enum InnerHTML<'a> {
+    Component(Component<'a>),
+    Text(Slice<'a>)
 }
 
-pub enum Attribute {
-    KV(KV),
-    V(V)
+pub enum Attribute<'a> {
+    KV(KV<'a>),
+    V(V<'a>)
 }
 
-pub type Slice = &'static str;
-pub type KV = (Slice, Slice);
-pub type V = Slice;
-pub type Attributes = Vec<Attribute>;
-pub type NodeInnerHTML = Vec<InnerHTML>;
+pub type Slice<'a> = &'a str;
+pub type KV<'a> = (Slice<'a>, Slice<'a>);
+pub type V<'a> = Slice<'a>;
+pub type Attributes<'a> = Vec<Attribute<'a>>;
+pub type NodeInnerHTML<'a> = Vec<InnerHTML<'a>>;
 
 /// An html component
 ///
@@ -113,15 +113,15 @@ pub type NodeInnerHTML = Vec<InnerHTML>;
 /// //      <input type='text' name='test-input' id='test-input' required>
 /// //  </form>
 /// ```
-pub struct Component {
-    pub node_type: &'static str,
-    pub attributes: Attributes,
-    pub inner_html: NodeInnerHTML
+pub struct Component<'a> {
+    pub node_type: &'a str,
+    pub attributes: Attributes<'a>,
+    pub inner_html: NodeInnerHTML<'a>
 }
 
-impl Component {
+impl<'a> Component<'a> {
 
-    pub fn new (node_type: &'static str, attributes: Attributes) -> Component {
+    pub fn new (node_type: &'a str, attributes: Attributes<'a>) -> Component<'a> {
         Component {
             node_type,
             attributes,
@@ -183,22 +183,22 @@ impl Component {
         node
     }
 
-    pub fn kv_attr (mut self, key: Slice, value: Slice) -> Component {
+    pub fn kv_attr (mut self, key: Slice<'a>, value: Slice<'a>) -> Component<'a> {
         self.attributes.push(Attribute::KV((key, value)));
         self
     }
 
-    pub fn v_attr (mut self, value: Slice) -> Component {
+    pub fn v_attr (mut self, value: Slice<'a>) -> Component<'a> {
         self.attributes.push(Attribute::V(value));
         self
     }
 
-    pub fn child (mut self, child: Component) -> Component {
+    pub fn child (mut self, child: Component<'a>) -> Component<'a> {
         self.inner_html.push(InnerHTML::Component(child));
         self
     }
 
-    pub fn text (mut self, text: &'static str) -> Component {
+    pub fn text (mut self, text: Slice<'a>) -> Component<'a> {
         self.inner_html.push(InnerHTML::Text(text));
         self
     }

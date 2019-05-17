@@ -7,8 +7,8 @@ license = "MIT"
 description = "A server-side, component-oriented, compiled html templating library for rust"
 repository = "https://github.com/enokson/htm"
 categories = []
-keywords = [ "html", "template", "server-side", "component" ]
-readme = "..."
+keywords = [ "html", "css", "template", "server-side", "component" ]
+readme = "./README.md"
 publish = false
 
 [dependencies]
