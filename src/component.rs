@@ -22,10 +22,10 @@ pub type NodeInnerHTML = Vec<InnerHTML>;
 /// ```rust
 /// use htm::component::{ Attribute, Component};
 /// 
-/// let p_builder = Component::new("p".to_string(), vec![ 
-///     Attribute::KV(("id".to_string(), "my-id".to_string())), 
-///     Attribute::KV(("class".to_string(), "my-class".to_string()))])
-///     .text("Hello, world!".to_string());
+/// let p_builder = Component::new("p")
+///     .kv_attr("id","my-id")
+///     .kv_attr("class","my-class")
+///     .text("Hello, world!");
 /// let p = p_builder.build();
 ///
 /// assert_eq!(p, "<p id='my-id' class='my-class'>Hello, world!</p>");
@@ -37,16 +37,16 @@ pub type NodeInnerHTML = Vec<InnerHTML>;
 /// ```
 /// use htm::component::{ Attribute, Component};
 ///
-/// let form_builder = Component::new("form".to_string(), vec![
-///     Attribute::KV(("action".to_string(), "".to_string()))])
-///     .child(Component::new("label".to_string(), vec![ 
-///         Attribute::KV(("for".to_string(), "test-input".to_string())) ])
-///         .text("Enter name: ".to_string()))
-///     .child(Component::new("input".to_string(), vec![
-///         Attribute::KV(("type".to_string(), "text".to_string())),
-///         Attribute::KV(("name".to_string(), "test-input".to_string())),
-///         Attribute::KV(("id".to_string(), "test-input".to_string())),
-///         Attribute::V("required".to_string())]));
+/// let form_builder = Component::new("form")
+///     .kv_attr("action","")
+///     .child(Component::new("label")
+///         .kv_attr("for","test-input")
+///         .text("Enter name: "))
+///     .child(Component::new("input")
+///         .kv_attr("type","text")
+///         .kv_attr("name","test-input")
+///         .kv_attr("id","test-input")
+///         .v_attr("required"));
 /// 
 /// let form = form_builder.build();
 /// assert_eq!(form, "<form action=''><label for='test-input'>Enter name: </label><input type='text' name='test-input' id='test-input' required></form>");
@@ -62,18 +62,16 @@ pub type NodeInnerHTML = Vec<InnerHTML>;
 /// ```
 /// use htm::component::{ Attribute, Component };
 /// 
-/// let video_builder = Component::new("video".to_string(), vec![
-///     Attribute::V("controls".to_string()),
-///     Attribute::KV(("width".to_string(), "250".to_string()))])
-///     .child(Component::new("source".to_string(), vec![
-///         Attribute::KV(("src".to_string(), "/media/examples/flower.webm".to_string())),
-///         Attribute::KV(("type".to_string(), "video/webm".to_string()))
-///     ])) 
-///     .child(Component::new("source".to_string(), vec![
-///         Attribute::KV(("src".to_string(), "/media/examples/flower.mp4".to_string())),
-///         Attribute::KV(("type".to_string(), "video/mp4".to_string()))
-///     ])) 
-///     .text("Sorry, your browser doesn't support embedded videos.".to_string());
+/// let video_builder = Component::new("video")
+///     .v_attr("controls")
+///     .kv_attr("width","250")
+///     .child(Component::new("source")
+///         .kv_attr("src","/media/examples/flower.webm")
+///         .kv_attr("type","video/webm"))
+///     .child(Component::new("source")
+///         .kv_attr("src","/media/examples/flower.mp4")
+///         .kv_attr("type","video/mp4")) 
+///     .text("Sorry, your browser doesn't support embedded videos.");
 /// 
 /// assert_eq!(video_builder.build(), "<video controls width='250'><source src='/media/examples/flower.webm' type='video/webm'><source src='/media/examples/flower.mp4' type='video/mp4'>Sorry, your browser doesn't support embedded videos.</video>");
 /// 
@@ -89,30 +87,6 @@ pub type NodeInnerHTML = Vec<InnerHTML>;
 /// // </video>
 /// 
 /// ```
-/// 
-/// Using method chaining
-/// ```
-/// use htm::component::{ Attribute, Component };
-///
-/// let form_builder = Component::new("form".to_string(), vec![])
-///     .kv_attr("action".to_string(), "".to_string())
-///     .child(Component::new("label".to_string(), vec![])
-///         .kv_attr("for".to_string(), "test-input".to_string())
-///         .text("Enter name: ".to_string()))
-///     .child(Component::new("input".to_string(), vec![])
-///         .kv_attr("type".to_string(), "text".to_string())
-///         .kv_attr("name".to_string(), "test-input".to_string())
-///         .kv_attr("id".to_string(), "test-input".to_string())
-///         .v_attr("required".to_string()));
-/// 
-/// let form = form_builder.build();
-/// assert_eq!(form, "<form action=''><label for='test-input'>Enter name: </label><input type='text' name='test-input' id='test-input' required></form>");
-///
-/// // <form action=''>
-/// //      <label for='test-input'>Enter name: </label>
-/// //      <input type='text' name='test-input' id='test-input' required>
-/// //  </form>
-/// ```
 pub struct Component {
     pub node_type: String,
     pub attributes: Attributes,
@@ -121,10 +95,10 @@ pub struct Component {
 
 impl Component {
 
-    pub fn new (node_type: String, attributes: Attributes) -> Component {
+    pub fn new (node_type: &str) -> Component {
         Component {
-            node_type,
-            attributes,
+            node_type: node_type.to_string(),
+            attributes: vec![],
             inner_html: vec![]
         }
     }
@@ -183,13 +157,13 @@ impl Component {
         node
     }
 
-    pub fn kv_attr (mut self, key: String, value: String) -> Component {
-        self.attributes.push(Attribute::KV((key, value)));
+    pub fn kv_attr (mut self, key: &str, value: &str) -> Component {
+        self.attributes.push(Attribute::KV((key.to_string(), value.to_string())));
         self
     }
 
-    pub fn v_attr (mut self, value: String) -> Component {
-        self.attributes.push(Attribute::V(value));
+    pub fn v_attr (mut self, value: &str) -> Component {
+        self.attributes.push(Attribute::V(value.to_string()));
         self
     }
 
@@ -198,8 +172,8 @@ impl Component {
         self
     }
 
-    pub fn text (mut self, text: String) -> Component {
-        self.inner_html.push(InnerHTML::Text(text));
+    pub fn text (mut self, text: &str) -> Component {
+        self.inner_html.push(InnerHTML::Text(text.to_string()));
         self
     }
 

@@ -15,18 +15,12 @@ pub type Entries = Vec<Entry>;
 /// use htm::stylesheet::{ Entry, StyleSheet };
 /// use htm::cssbox::{ CssBox, Property };
 /// 
-/// let class_name = ".my-class".to_string();
-/// let height = ("height".to_string(), "250vh".to_string());
-/// 
-/// let stylesheet_builder = StyleSheet::new(vec![
-///     Entry::CssBox(CssBox::new(".my-class".to_string(), vec![
-///         Property::Declaration(height),
-///         Property::Declaration(("width".to_string(), "100px".to_string()))
-///     ])),
-///     Entry::CssBox(CssBox::new(".my-second-class".to_string(), vec![
-///         Property::Declaration(("color".to_string(), "red".to_string()))
-///     ]))
-/// ]);
+/// let stylesheet_builder = StyleSheet::new()
+///     .css_box(CssBox::new(".my-class")
+///         .declaration("height", "250vh")
+///         .declaration("width", "100px"))
+///     .css_box(CssBox::new(".my-second-class")
+///         .declaration("color", "red"));
 /// 
 /// let stylesheet = stylesheet_builder.build();
 /// 
@@ -51,14 +45,13 @@ pub type Entries = Vec<Entry>;
 /// use htm::stylesheet::{ Entry, StyleSheet };
 /// use htm::cssbox::{ CssBox, Property };
 /// 
-/// let stylesheet_builder = StyleSheet::new(vec![])
-///     .at_rule("@import 'custom.css'".to_string()) // the simicolon will be added automatically when build is ran
-///     .css_box(CssBox::new(".my-class".to_string(), vec![
-///         Property::Declaration(("height".to_string(), "250vh".to_string())),
-///         Property::Declaration(("width".to_string(), "100px".to_string()))]))
-///     .css_box(CssBox::new(".my-second-class".to_string(), vec![
-///         Property::Declaration(("color".to_string(), "red".to_string())) ]));
-/// 
+/// let stylesheet_builder = StyleSheet::new()
+///     .at_rule("@import 'custom.css'") // the simicolon will be added automatically when build is ran
+///     .css_box(CssBox::new(".my-class")
+///         .declaration("height", "250vh")
+///         .declaration("width", "100px"))
+///     .css_box(CssBox::new(".my-second-class")
+///         .declaration("color", "red"));
 /// 
 /// let stylesheet = stylesheet_builder.build();
 /// 
@@ -84,10 +77,10 @@ pub type Entries = Vec<Entry>;
 /// use htm::stylesheet::{ Entry, StyleSheet };
 /// use htm::cssbox::{ CssBox, Property };
 /// 
-/// let stylesheet_builder = StyleSheet::new(vec![])
-///     .css_box(CssBox::new("@media (min-width: 801px)".to_string(), vec![])
-///         .css_box(CssBox::new("body".to_string(), vec![])
-///             .declaration("color".to_string(), "red".to_string())));
+/// let stylesheet_builder = StyleSheet::new()
+///     .css_box(CssBox::new("@media (min-width: 801px)")
+///         .css_box(CssBox::new("body")
+///             .declaration("color", "red")));
 /// 
 /// 
 /// let stylesheet = stylesheet_builder.build();
@@ -109,9 +102,9 @@ pub type Entries = Vec<Entry>;
 /// use htm::stylesheet::{ Entry, StyleSheet };
 /// use htm::cssbox::{ CssBox, Property };
 /// 
-/// let stylesheet_builder = StyleSheet::new(vec![])
-///     .css_box(CssBox::new("#my-id, .my-class, p.my-second-class".to_string(), vec![])
-///         .declaration("color".to_string(), "red".to_string()));
+/// let stylesheet_builder = StyleSheet::new()
+///     .css_box(CssBox::new("#my-id, .my-class, p.my-second-class")
+///         .declaration("color", "red"));
 /// 
 /// let stylesheet = stylesheet_builder.build();
 /// 
@@ -132,9 +125,9 @@ pub struct StyleSheet {
 
 impl StyleSheet {
 
-    pub fn new (lines: Entries) -> StyleSheet {
+    pub fn new () -> StyleSheet {
         StyleSheet {
-            lines
+            lines: vec![]
         }
     }
 
@@ -143,8 +136,13 @@ impl StyleSheet {
         self
     }
 
-    pub fn at_rule (mut self, rule: String) -> StyleSheet {
-        self.lines.push(Entry::Rule(rule));
+    pub fn at_rule (mut self, rule: &str) -> StyleSheet {
+        self.lines.push(Entry::Rule(rule.to_string()));
+        self
+    }
+
+    pub fn declaration (mut self, declaration: &str) -> StyleSheet {
+        self.lines.push(Entry::Rule(declaration.to_string()));
         self
     }
 

@@ -17,15 +17,15 @@ pub struct CssBox {
 
 impl CssBox {
 
-    pub fn new (selector: String, properties: Properties) -> CssBox {
+    pub fn new (selector: &str) -> CssBox {
         CssBox {
-            selector,
-            properties
+            selector: selector.to_string(),
+            properties: vec![]
         }
     }
 
-    pub fn declaration (mut self, key: String, value: String) -> CssBox {
-        self.properties.push(Property::Declaration((key, value)));
+    pub fn declaration (mut self, key: &str, value: &str) -> CssBox {
+        self.properties.push(Property::Declaration((key.to_string(), value.to_string())));
         self
     }
 
