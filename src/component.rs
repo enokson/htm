@@ -6,7 +6,8 @@ pub enum InnerHTML {
 
 pub enum Attribute {
     KV(KV),
-    V(V)
+    V(V),
+    Event(KV)
 }
 
 pub type Slice<'a> = &'a str;
@@ -115,6 +116,9 @@ impl Component {
                 },
                 Attribute::V(attr) => {
                     node = format!("{} {}", node, attr);
+                },
+                Attribute::Event((e, f)) => {
+                    node = format!("{} {}={}", node, e, f);
                 }
 
             }
@@ -164,6 +168,11 @@ impl Component {
 
     pub fn v_attr (mut self, value: &str) -> Component {
         self.attributes.push(Attribute::V(value.to_string()));
+        self
+    }
+
+    pub fn event (mut self, event: &str, function: &str) -> Component {
+        self.attributes.push(Attribute::Event((event.to_string(), function.to_string())));
         self
     }
 
