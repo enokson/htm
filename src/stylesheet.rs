@@ -1,5 +1,4 @@
 use super::cssbox::{ CssBox };
-use super::component::{ Slice };
 
 pub type CssBoxes = Vec<CssBox>;
 pub enum Entry {

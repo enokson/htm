@@ -1,4 +1,3 @@
-use super::component::{ Slice };
 
 pub type Declaration = (String, String);
 pub type Declarations = Vec<Declaration>;
